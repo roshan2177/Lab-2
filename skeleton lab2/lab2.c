@@ -102,10 +102,116 @@ void handle_chat_message(const char *msg){
     redraw_chat();
 }
 
-#define INPUT_MAX 64
+#define INPUT_BUFFER_SIZE  256
+// #define CHAT_COLS 64
+#define INPUT_ROWS 2
+chat input_buffer[INPUT_BUFFER_SIZE];
+char display_buffer[INPUT_ROWS][CHAT_COLS];
+char previous_display_buffer[INPUT_ROWS][CHAT_COLS];
+int cursor_pos = 0;
+int display_start = 0;
+// int input_length = 0;
+void update_display_buffer(){
+  for (int i = 0; i < CHAT_ROWS; i++)
+  {
+    memset(display_buffer[i], ' ', CHAT_COLS);
+    display_buffer[i][CHAT_COLS - 1] = '\0';
+  }
+  int start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
+  int len_to_display = min(INPUT_ROWS * CHAT_COLS, INPUT_BUFFER_SIZE - start_idx);
+  if(len_to_display > 0){
+    int line_idx = 0;
+    for (int i = 0; i < len_to_display; i++)
+    {
+      display_buffer[line_idx][i % CHAT_COLS] = input_buffer[start_idx + i];
+      if ((i + 1) % CHAT_COLS == 0)
+      {
+        line_idx++;
+      }
+    }
+    
+  }
+}
+// void print_display_buffer(){
+//   for(int row = 0; row < INPUT_ROWS; row++) {
+//     for(int col = 0; col < CHAT_COLS; col++) {
+//       if (display_buffer[row][col] != previous_display_buffer[row][col]) {
+//         fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
+//         previous_display_buffer[row][col] = display_buffer[row][col];
+//       }
+//     }
+//   }
+// }
+#include <mutex>
 
+std::mutex display_mutex;
 
+void print_display_buffer() {
+  std::lock_guard<std::mutex> lock(display_mutex); // 加锁，确保线程安全
 
+  for(int row = 0; row < INPUT_ROWS; row++) {
+    for(int col = 0; col < CHAT_COLS; col++) {
+      if (display_buffer[row][col] != previous_display_buffer[row][col]) {
+        fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
+        previous_display_buffer[row][col] = display_buffer[row][col];
+      }
+    }
+  }
+}
+void handle_input(char c){
+  if (c == '\n') {
+    // send message
+    printf("send message: %s\n", input_buffer);
+    // TODO: send message to server
+    cursor_pos = 0;
+    memset(input_buffer, 0, sizeof(input_buffer));
+    update_display_buffer();
+    print_display_buffer();
+    handle_chat_message(input_buffer);
+    return;
+  }else if (c == '\b') {
+    // backspace
+    if (cursor_pos > 0) {
+      cursor_pos--;
+      for (int i = cursor_pos; i < INPUT_BUFFER_SIZE - 1; i++) {
+        input_buffer[i] = input_buffer[i + 1];
+      }
+      input_buffer[INPUT_BUFFER_SIZE - 1] = '\0';
+      // input_buffer[cursor_pos] = '\0';
+      update_display_buffer();
+      print_display_buffer();
+      return;
+    } else if (c == 27){
+      // left arrow
+      if (cursor_pos > 0) {
+        cursor_pos--;
+        update_display_buffer();
+        print_display_buffer();
+      } else if(c == 91){
+        // right arrow
+        if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
+          cursor_pos++;
+          update_display_buffer();
+          print_display_buffer();
+        }
+      } else {
+        // char input
+        if (cursor_pos < INPUT_BUFFER_SIZE - 1) {
+          int idx = cursor_pos;
+          for (int i = INPUT_BUFFER_SIZE - 1; i > idx; i--) {
+            input_buffer[i] = input_buffer[i - 1];
+          }
+          input_buffer[cursor_pos] = c;
+          cursor_pos++;
+          update_display_buffer();
+          print_display_buffer();
+        }
+      }
+    }
+  }
+  return;
+
+}
 int main()
 {
   int err, col;
