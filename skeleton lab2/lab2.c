@@ -119,7 +119,7 @@ int display_start = 0;
 
 void update_display_buffer(){
   printf("input_buffer: %s\n", input_buffer);
-  for (int i = 0; i < CHAT_ROWS; i++)
+  for (int i = 0; i < INPUT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
     display_buffer[i][CHAT_COLS - 1] = '\0';
