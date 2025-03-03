@@ -199,9 +199,10 @@ void handle_input(char c){
     cursor_pos = 0;
     handle_chat_message(input_buffer);
     memset(input_buffer, 0, sizeof(input_buffer));
-    printf("input_buffer: %s\n", input_buffer);
+    fbclear_input();
+    // printf("input_buffer: %s\n", input_buffer);
     update_display_buffer();
-    printf("display_buffer: %s\n", display_buffer[0]);
+    // printf("display_buffer: %s\n", display_buffer[0]);
     print_display_buffer();
     
     return;
