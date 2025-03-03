@@ -156,7 +156,7 @@ void print_display_buffer() {
         // bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
         bool is_cursor = 0;
         // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
-        // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
+        fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
         previous_display_buffer[row][col] = display_buffer[row][col];
       }
     }
