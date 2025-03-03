@@ -153,7 +153,8 @@ void print_display_buffer() {
   for(int row = 0; row < INPUT_ROWS; row++) {
     for(int col = 0; col < CHAT_COLS; col++) {
       if (display_buffer[row][col] != previous_display_buffer[row][col]) {
-        bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
+        // bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
+        bool is_cursor = 0;
         fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
         // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
         previous_display_buffer[row][col] = display_buffer[row][col];
@@ -250,7 +251,7 @@ int main()
   }
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
-  // handle_input('a');
+  handle_input('a');
   // for(int i = 0; i < 3; i++) {
   //     handle_input('a');
   //     handle_input('b');
