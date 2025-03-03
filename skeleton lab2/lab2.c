@@ -297,10 +297,10 @@ int main()
   handle_input('\n');
   for (int i = 0; i < 300; i++)
   {
-    sleep(1);
+    // sleep(1);
     handle_input('a' + i % 26);
-    if( i % 20 == 0){
-      // sleep(1);
+    if( i % 50 == 0){
+      sleep(4);
     }
     // handle_input('\n');
   }
