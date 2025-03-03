@@ -116,6 +116,12 @@ void fbputs(const char *s, int row, int col)
   while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
 }
 
+void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cursor_col)
+{
+  char c;
+  while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col == cursor_col);
+}
+
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
 
 od --address-radix=n --width=16 -v -t x1 -j 4 -N 2048 lat0-16.psfu

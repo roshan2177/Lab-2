@@ -97,14 +97,9 @@ void redraw_chat(){
         fbputs(char_buffer[line], i, 0);
     }
 }
-#include <pthread.h>
-
-pthread_mutex_t chat_mutex = PTHREAD_MUTEX_INITIALIZER;
 void handle_chat_message(const char *msg){
-    pthread_mutex_lock(&chat_mutex);
     add_chat_message(msg);
     redraw_chat();
-    pthread_mutex_unlock(&chat_mutex);
 }
 
 #define INPUT_BUFFER_SIZE  256
@@ -154,24 +149,20 @@ pthread_mutex_t display_mutex = PTHREAD_MUTEX_INITIALIZER;
 #include<stdbool.h>
 void print_display_buffer() {
   pthread_mutex_lock(&display_mutex); // 加锁，确保线程安全
-  // fbopen();
-  int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1;
-  int cursor_col = cursor_pos % CHAT_COLS;
+  fbopen();
   for(int row = 0; row < INPUT_ROWS; row++) {
-    fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
-    // for(int col = 0; col < CHAT_COLS; col++) {
-      
-      // if (display_buffer[row][col] != previous_display_buffer[row][col]) {
-      //   // bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
-      //   bool is_cursor = 0;
-      //   // printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
-      //   // printf("Char: %d\n", display_buffer[row][col]);
-      //   fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
-      //   // fbputchar('=', CHAT_ROWS, col, 0);
-      //   // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
-      //   previous_display_buffer[row][col] = display_buffer[row][col];
-      // }
-    // }
+    for(int col = 0; col < CHAT_COLS; col++) {
+      if (display_buffer[row][col] != previous_display_buffer[row][col]) {
+        // bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
+        bool is_cursor = 0;
+        // printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
+        // printf("Char: %d\n", display_buffer[row][col]);
+        fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
+        // fbputchar('=', CHAT_ROWS, col, 0);
+        // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
+        previous_display_buffer[row][col] = display_buffer[row][col];
+      }
+    }
   }
 
   pthread_mutex_unlock(&display_mutex); // 解锁

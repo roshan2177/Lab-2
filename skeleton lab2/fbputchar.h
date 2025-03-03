@@ -10,5 +10,5 @@
 extern int fbopen(void);
 extern void fbputchar(char, int, int, bool);
 extern void fbputs(const char *, int, int);
-
+extern void fbputs_with_cursor(const char *, int, int, int, int);
 #endif
