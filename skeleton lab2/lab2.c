@@ -171,8 +171,8 @@ void print_display_buffer() {
     // printf("cursor_row: %d\n", cursor_row);
     // printf("cursor_col: %d\n", cursor_col);
     // printf("display_buffer[row]: %s\n", display_buffer[row]);
-    // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
-    fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
+    fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
+    // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
     // for(int col = 0; col < CHAT_COLS; col++) {
       
       // if (display_buffer[row][col] != previous_display_buffer[row][col]) {
@@ -283,6 +283,21 @@ int main()
   // sleep(5);
   handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
+  for (int i = 0; i < 5; i++)
+  {
+    sleep(1);
+    handle_input('a' + i);
+
+  }
+  handle_input('\n');
+  sleep(3);
+  handle_input('b');
+  handle_input('c');
+  handle_input(27);
+  handle_input(27);
+  handle_input('\b');
+  handle_input('d');
+  
   // printf("input_buffer: %s\n", input_buffer);
   // for(int i = 0; i < 3; i++) {
   //     handle_input('a');
