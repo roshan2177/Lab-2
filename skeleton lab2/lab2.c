@@ -288,11 +288,14 @@ int main()
   handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
   handle_input('\n');
-  for (int i = 0; i < 40; i++)
+  for (int i = 0; i < 128; i++)
   {
-    sleep(1);
+    // sleep(1);
     handle_input('a' + i % 26);
-    handle_input('\n');
+    if( i % 20 == 0){
+      sleep(1);
+    }
+    // handle_input('\n');
   }
   // handle_input('\n');
   // sleep(3);
