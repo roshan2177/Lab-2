@@ -59,7 +59,8 @@ int fbopen()
  * Draw the given character at the given row/column.
  * fbopen() must be called first.
  */
-void fbputchar(char c, int row, int col)
+#include <stdbool.h>
+void fbputchar(char c, int row, int col, bool is_cursor = false)
 {
   int x, y;
   unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
@@ -69,6 +70,9 @@ void fbputchar(char c, int row, int col)
     (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
   for (y = 0 ; y < FONT_HEIGHT * 2 ; y++, left += fb_finfo.line_length) {
     pixels = *pixelp;
+    if (is_cursor) {
+      pixels = ~pixels;
+    }
     pixel = left;
     mask = 0x80;
     for (x = 0 ; x < FONT_WIDTH ; x++) {
