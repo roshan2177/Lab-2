@@ -118,6 +118,7 @@ int display_start = 0;
 // int input_length = 0;
 
 void update_display_buffer(){
+  printf("input_buffer: %s\n", input_buffer);
   for (int i = 0; i < CHAT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
@@ -281,7 +282,7 @@ int main()
   // sleep(5);
   handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
-  printf("input_buffer: %s\n", input_buffer);
+  // printf("input_buffer: %s\n", input_buffer);
   // for(int i = 0; i < 3; i++) {
   //     handle_input('a');
   //     handle_input('b');
