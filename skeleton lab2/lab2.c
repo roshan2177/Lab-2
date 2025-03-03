@@ -121,6 +121,7 @@ void update_display_buffer(){
   for (int i = 0; i < CHAT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
+    display_buffer[i][CHAT_COLS - 1] = '\0';
   }
   int start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
   int len_to_display = INPUT_ROWS * CHAT_COLS > INPUT_BUFFER_SIZE - start_idx ? INPUT_BUFFER_SIZE - start_idx : INPUT_ROWS * CHAT_COLS;
