@@ -157,7 +157,7 @@ void print_display_buffer() {
   // fbopen();
   int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1;
   int cursor_col = cursor_pos % CHAT_COLS;
-  fbclear_input();
+  // fbclear_input();
   for(int row = 0; row < INPUT_ROWS; row++) {
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // for(int col = 0; col < CHAT_COLS; col++) {
