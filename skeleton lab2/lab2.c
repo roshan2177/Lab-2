@@ -300,7 +300,7 @@ int main()
   handle_input('c');
   sleep(3);
   handle_input(27);
-  handle_input(27);
+  // handle_input(27);
   sleep(3);
   handle_input('\b');
   handle_input('d');
