@@ -283,20 +283,21 @@ int main()
   // sleep(5);
   handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
-  for (int i = 0; i < 5; i++)
-  {
-    sleep(1);
-    handle_input('a' + i);
-
-  }
   handle_input('\n');
-  sleep(3);
-  handle_input('b');
-  handle_input('c');
-  handle_input(27);
-  handle_input(27);
-  handle_input('\b');
-  handle_input('d');
+  // for (int i = 0; i < 5; i++)
+  // {
+  //   sleep(1);
+  //   handle_input('a' + i);
+
+  // }
+  // handle_input('\n');
+  // sleep(3);
+  // handle_input('b');
+  // handle_input('c');
+  // handle_input(27);
+  // handle_input(27);
+  // handle_input('\b');
+  // handle_input('d');
   
   // printf("input_buffer: %s\n", input_buffer);
   // for(int i = 0; i < 3; i++) {
