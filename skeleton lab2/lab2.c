@@ -160,7 +160,7 @@ void update_display_buffer(){
 
 pthread_mutex_t display_mutex = PTHREAD_MUTEX_INITIALIZER;
 #include<stdbool.h>
-char tmp[CHAT_COLS];
+char tmp[CHAT_COLS + 1];
 void print_display_buffer() {
   pthread_mutex_lock(&display_mutex); // 加锁，确保线程安全
   // fbopen();
@@ -173,6 +173,7 @@ void print_display_buffer() {
     // printf("cursor_col: %d\n", cursor_col);
     printf("display_buffer[row]: %s\n", display_buffer[row]);
     memcpy(tmp, display_buffer[row], CHAT_COLS);
+    tmp[CHAT_COLS] = '\0';
     printf("tmp: %s\n", tmp);
     fbputs_with_cursor(tmp, row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
