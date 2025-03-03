@@ -1,9 +1,12 @@
 /*
- *
- * CSEE 4840 Lab 2 for 2019
- *
- * Name/UNI: Please Changeto Yourname (pcy2301)
- */
+Display part of the lab2.
+API to use:
+    handle_chat_message(const char *msg): add a chat message to the chat window.
+    handle_input(char c): handle the input from the keyboard.
+        special keys: '\n' for enter, '\b' for backspace, 27 for left arrow, 91 for right arrow.
+        other keys: char input.
+        note: After pressing \n, the message will be sent into message record. No need to add it manually.
+*/
 #include "fbputchar.h"
 #include <stdio.h>
 #include <stdlib.h>
