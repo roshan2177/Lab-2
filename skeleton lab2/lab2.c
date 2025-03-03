@@ -133,7 +133,7 @@ void update_display_buffer(){
     for (int i = 0; i < len_to_display; i++)
     {
       display_buffer[line_idx][i % CHAT_COLS] = input_buffer[start_idx + i];
-      if (line_idx == 0) printf("display_buffer[%d][%d]: %c\n", line_idx, i % CHAT_COLS, display_buffer[line_idx][i % CHAT_COLS]);
+      if (line_idx == 0 && i < 20) printf("display_buffer[%d][%d]: %c\n", line_idx, i % CHAT_COLS, display_buffer[line_idx][i % CHAT_COLS]);
       if ((i + 1) % CHAT_COLS == 0)
       {
         line_idx++;
