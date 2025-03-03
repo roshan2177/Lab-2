@@ -238,12 +238,12 @@ int main()
   }
 
   /* Draw rows of asterisks across the top and bottom of the screen */
-  for (col = 0 ; col < 64 ; col++) {
-    fbputchar('*', 0, col, 0);
-    fbputchar('*', 23, col, 0);
-  }
+  // for (col = 0 ; col < 64 ; col++) {
+  //   fbputchar('*', 0, col, 0);
+  //   fbputchar('*', 23, col, 0);
+  // }
 
-  fbputs("Hello CSEE 4840 World!", 4, 10);
+  // fbputs("Hello CSEE 4840 World!", 4, 10);
   fbclear();
   for(int col = 0; col < 64; col++) {
     fbputchar('=', CHAT_ROWS, col, 0);
@@ -254,10 +254,10 @@ int main()
       handle_input('a');
       handle_input('b');
   }
-  for(int i = 0; i < 32; i++) {
-      handle_input('a');
-      handle_input('b');
-  }
+  // for(int i = 0; i < 32; i++) {
+  //     handle_input('a');
+  //     handle_input('b');
+  // }
   handle_input(27);
   handle_input('\b');
   handle_input(27);
