@@ -271,7 +271,8 @@ int main()
   }
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
-  sleep(5);
+  // sleep(5);
+  handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
   printf("input_buffer: %s\n", input_buffer);
   // for(int i = 0; i < 3; i++) {
