@@ -159,6 +159,10 @@ void print_display_buffer() {
   int cursor_col = cursor_pos % CHAT_COLS;
   // fbclear_input();
   for(int row = 0; row < INPUT_ROWS; row++) {
+    printf("row: %d\n", row);
+    printf("cursor_row: %d\n", cursor_row);
+    printf("cursor_col: %d\n", cursor_col);
+    printf("display_buffer[row]: %s\n", display_buffer[row]);
     fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // for(int col = 0; col < CHAT_COLS; col++) {
       
