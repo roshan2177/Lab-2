@@ -250,10 +250,11 @@ int main()
   }
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
-  for(int i = 0; i < 3; i++) {
-      handle_input('a');
-      handle_input('b');
-  }
+  handle_input('a');
+  // for(int i = 0; i < 3; i++) {
+  //     handle_input('a');
+  //     handle_input('b');
+  // }
   // for(int i = 0; i < 32; i++) {
   //     handle_input('a');
   //     handle_input('b');
@@ -266,7 +267,7 @@ int main()
   //   handle_input('a');
   //   handle_input('b');
   // }  
-  handle_input(27);
+  // handle_input(27);
   // /* Open the keyboard */
   // if ( (keyboard = openkeyboard(&endpoint_address)) == NULL ) {
   //   fprintf(stderr, "Did not find a keyboard\n");
