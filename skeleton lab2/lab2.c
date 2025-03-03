@@ -231,6 +231,7 @@ void handle_input(char c){
             input_buffer[i] = input_buffer[i - 1];
           }
           input_buffer[cursor_pos] = c;
+          printf("input_buffer: %s\n", input_buffer);
           cursor_pos++;
           update_display_buffer();
           print_display_buffer();
