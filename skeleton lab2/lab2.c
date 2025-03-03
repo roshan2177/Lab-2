@@ -292,7 +292,7 @@ int main()
   {
     sleep(1);
     handle_input('a' + i % 26);
-
+    handle_input('\n');
   }
   // handle_input('\n');
   // sleep(3);
