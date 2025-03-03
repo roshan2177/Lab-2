@@ -113,7 +113,7 @@ void fbputchar(char c, int row, int col, bool is_cursor)
 void fbputs(const char *s, int row, int col)
 {
   char c;
-  while ((c = *s++) != 0) fbputchar(c, row, col++);
+  while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
