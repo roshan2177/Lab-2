@@ -243,9 +243,11 @@ void handle_input(char c){
           }
           input_buffer[cursor_pos] = c;
           
-          // printf("input_buffer: %s\n", input_buffer);
+          printf("input_buffer: %s\n", input_buffer);
           cursor_pos++;
           update_display_buffer();
+          printf("display_buffer: %s\n", display_buffer[0]);
+          printf("display_buffer: %s\n", display_buffer[1]);
           print_display_buffer();
         }
       }
@@ -293,7 +295,7 @@ int main()
     // sleep(1);
     handle_input('a' + i % 26);
     if( i % 20 == 0){
-      sleep(1);
+      // sleep(1);
     }
     // handle_input('\n');
   }
