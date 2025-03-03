@@ -214,8 +214,8 @@ void handle_input(char c){
           }
           input_buffer[cursor_pos] = c;
           cursor_pos++;
-          update_display_buffer();
-          print_display_buffer();
+          // update_display_buffer();
+          // print_display_buffer();
         }
       }
     
