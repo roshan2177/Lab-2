@@ -127,6 +127,7 @@ void update_display_buffer(){
   int len_to_display = INPUT_ROWS * CHAT_COLS > INPUT_BUFFER_SIZE - start_idx ? INPUT_BUFFER_SIZE - start_idx : INPUT_ROWS * CHAT_COLS;
   printf("len_to_display: %d\n", len_to_display);
   printf("start_idx: %d\n", start_idx);
+  printf("input_buffer: %s\n", input_buffer);
   if(len_to_display > 0){
     int line_idx = 0;
     for (int i = 0; i < len_to_display; i++)
