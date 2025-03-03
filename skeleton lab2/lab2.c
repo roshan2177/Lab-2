@@ -149,15 +149,14 @@ pthread_mutex_t display_mutex = PTHREAD_MUTEX_INITIALIZER;
 #include<stdbool.h>
 void print_display_buffer() {
   pthread_mutex_lock(&display_mutex); // 加锁，确保线程安全
-
+  fbopen();
   for(int row = 0; row < INPUT_ROWS; row++) {
     for(int col = 0; col < CHAT_COLS; col++) {
       if (display_buffer[row][col] != previous_display_buffer[row][col]) {
         // bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
         bool is_cursor = 0;
-        fbopen();
-        printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
-        printf("Char: %d\n", display_buffer[row][col]);
+        // printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
+        // printf("Char: %d\n", display_buffer[row][col]);
         fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
         // fbputchar('=', CHAT_ROWS, col, 0);
         // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
@@ -256,10 +255,10 @@ int main()
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
-  // for(int i = 0; i < 3; i++) {
-  //     handle_input('a');
-  //     handle_input('b');
-  // }
+  for(int i = 0; i < 3; i++) {
+      handle_input('a');
+      handle_input('b');
+  }
   // for(int i = 0; i < 32; i++) {
   //     handle_input('a');
   //     handle_input('b');
