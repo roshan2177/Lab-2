@@ -157,6 +157,7 @@ void print_display_buffer() {
   // fbopen();
   int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1;
   int cursor_col = cursor_pos % CHAT_COLS;
+  fbclear_input();
   for(int row = 0; row < INPUT_ROWS; row++) {
     fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // for(int col = 0; col < CHAT_COLS; col++) {
@@ -264,10 +265,10 @@ int main()
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
   handle_input('a');
-  for(int i = 0; i < 3; i++) {
-      handle_input('a');
-      handle_input('b');
-  }
+  // for(int i = 0; i < 3; i++) {
+  //     handle_input('a');
+  //     handle_input('b');
+  // }
   // for(int i = 0; i < 32; i++) {
   //     handle_input('a');
   //     handle_input('b');
