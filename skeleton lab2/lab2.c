@@ -116,7 +116,7 @@ char previous_display_buffer[INPUT_ROWS][CHAT_COLS];
 int cursor_pos = 0;
 int display_start = 0;
 // int input_length = 0;
-
+int start_idx = 0;
 void update_display_buffer(){
   // printf("input_buffer: %s\n", input_buffer);
   for (int i = 0; i < INPUT_ROWS; i++)
@@ -125,7 +125,7 @@ void update_display_buffer(){
     display_buffer[i][CHAT_COLS - 1] = '\0';
   }
   // printf("input_buffer: %s\n", input_buffer);
-  int start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
+  start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
   int len_to_display = INPUT_ROWS * CHAT_COLS > INPUT_BUFFER_SIZE - start_idx ? INPUT_BUFFER_SIZE - start_idx : INPUT_ROWS * CHAT_COLS;
   // printf("len_to_display: %d\n", len_to_display);
   // printf("start_idx: %d\n", start_idx);
@@ -164,7 +164,7 @@ char tmp[CHAT_COLS + 1];
 void print_display_buffer() {
   pthread_mutex_lock(&display_mutex); // 加锁，确保线程安全
   // fbopen();
-  int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1;
+  int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1 - start_idx / CHAT_COLS;
   int cursor_col = cursor_pos % CHAT_COLS;
   fbclear_input();
   for(int row = 0; row < INPUT_ROWS; row++) {
