@@ -171,10 +171,10 @@ void print_display_buffer() {
     // printf("row: %d\n", row);
     // printf("cursor_row: %d\n", cursor_row);
     // printf("cursor_col: %d\n", cursor_col);
-    printf("display_buffer[row]: %s\n", display_buffer[row]);
+    // printf("display_buffer[row]: %s\n", display_buffer[row]);
     memcpy(tmp, display_buffer[row], CHAT_COLS);
     tmp[CHAT_COLS] = '\0';
-    printf("tmp: %s\n", tmp);
+    // printf("tmp: %s\n", tmp);
     fbputs_with_cursor(tmp, row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
@@ -248,11 +248,11 @@ void handle_input(char c){
           }
           input_buffer[cursor_pos] = c;
           
-          printf("input_buffer: %s\n", input_buffer);
+          // printf("input_buffer: %s\n", input_buffer);/
           cursor_pos++;
           update_display_buffer();
-          printf("display_buffer: %s\n", display_buffer[0]);
-          printf("display_buffer: %s\n", display_buffer[1]);
+          // printf("display_buffer: %s\n", display_buffer[0]);
+          // printf("display_buffer: %s\n", display_buffer[1]);
           print_display_buffer();
         }
       }
