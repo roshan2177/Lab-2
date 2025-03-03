@@ -170,25 +170,25 @@ void print_display_buffer() {
     // printf("row: %d\n", row);
     // printf("cursor_row: %d\n", cursor_row);
     // printf("cursor_col: %d\n", cursor_col);
-    printf("display_buffer[%d]: %s\n", row , display_buffer[row]);
+    printf("display_buffer[row]: %s\n", display_buffer[row]);
 
-    // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
+    fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
-    for(int col = 0; col < CHAT_COLS; col++) {
+    // for(int col = 0; col < CHAT_COLS; col++) {
       
-      if (display_buffer[row][col] != previous_display_buffer[row][col]) {
-        bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
-        // bool is_cursor = 0;
-        // printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
-        // printf("Char: %d\n", display_buffer[row][col]);
-        fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
+      // if (display_buffer[row][col] != previous_display_buffer[row][col]) {
+      //   // bool is_cursor = (row * CHAT_COLS + col) == cursor_pos;
+      //   bool is_cursor = 0;
+      //   // printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
+      //   // printf("Char: %d\n", display_buffer[row][col]);
+      //   fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
       //   // fbputchar('=', CHAT_ROWS, col, 0);
       //   // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
-        previous_display_buffer[row][col] = display_buffer[row][col];
-      }
-    }
+      //   previous_display_buffer[row][col] = display_buffer[row][col];
+      // }
+    // }
   }
-  
+
   pthread_mutex_unlock(&display_mutex); // 解锁
 }
 
@@ -247,8 +247,8 @@ void handle_input(char c){
           printf("input_buffer: %s\n", input_buffer);
           cursor_pos++;
           update_display_buffer();
-          // printf("display_buffer: %s\n", display_buffer[0]);
-          // printf("display_buffer: %s\n", display_buffer[1]);
+          printf("display_buffer: %s\n", display_buffer[0]);
+          printf("display_buffer: %s\n", display_buffer[1]);
           print_display_buffer();
         }
       }
