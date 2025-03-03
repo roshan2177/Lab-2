@@ -250,7 +250,7 @@ int main()
   }
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
-  handle_input('a');
+  // handle_input('a');
   // for(int i = 0; i < 3; i++) {
   //     handle_input('a');
   //     handle_input('b');
