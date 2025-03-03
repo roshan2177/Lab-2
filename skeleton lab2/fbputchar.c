@@ -60,7 +60,7 @@ int fbopen()
  * fbopen() must be called first.
  */
 #include <stdbool.h>
-void fbputchar(char c, int row, int col)
+void fbputchar(char c, int row, int col, bool is_cursor)
 {
   int x, y;
   unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
@@ -70,6 +70,9 @@ void fbputchar(char c, int row, int col)
     (col * FONT_WIDTH * 2 + fb_vinfo.xoffset) * BITS_PER_PIXEL / 8;
   for (y = 0 ; y < FONT_HEIGHT * 2 ; y++, left += fb_finfo.line_length) {
     pixels = *pixelp;
+    if (is_cursor) {
+      pixels = ~pixels;
+    }
     pixel = left;
     mask = 0x80;
     for (x = 0 ; x < FONT_WIDTH ; x++) {
@@ -110,7 +113,7 @@ void fbputchar(char c, int row, int col)
 void fbputs(const char *s, int row, int col)
 {
   char c;
-  while ((c = *s++) != 0) fbputchar(c, row, col++);
+  while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz

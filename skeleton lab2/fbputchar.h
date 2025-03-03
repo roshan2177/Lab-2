@@ -8,7 +8,7 @@
 #define FBOPEN_BPP -5          /* Unexpected bits-per-pixel */
 #include <stdbool.h>
 extern int fbopen(void);
-extern void fbputchar(char, int, int);
+extern void fbputchar(char, int, int, bool);
 extern void fbputs(const char *, int, int);
 
 #endif

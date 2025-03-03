@@ -49,21 +49,21 @@ void test_display(){
 void fbclear() {
   for (int row = 0; row < 24; row++) {
       for (int col = 0; col < 64; col++) {
-          fbputchar(' ', row, col, 0);  // 用空格覆盖整个屏幕
+          fbputchar(' ', row, col);  // 用空格覆盖整个屏幕
       }
   }
 }
 void fbclear_chat() {
   for (int row = 0; row < CHAT_ROWS; row++) {
       for (int col = 0; col < CHAT_COLS; col++) {
-          fbputchar(' ', row, col, 0);  // 用空格覆盖整个屏幕
+          fbputchar(' ', row, col);  // 用空格覆盖整个屏幕
       }
   }
 }
 void fbclear_input(){
   for (int row = CHAT_ROWS + 1; row < 24; row++) {
       for (int col = 0; col < 64; col++) {
-          fbputchar(' ', row, col, 0);  // 用空格覆盖整个屏幕
+          fbputchar(' ', row, col);  // 用空格覆盖整个屏幕
       }
   }
 }
@@ -247,7 +247,7 @@ int main()
   // fbputs("Hello CSEE 4840 World!", 4, 10);
   fbclear();
   for(int col = 0; col < 64; col++) {
-    fbputchar('=', CHAT_ROWS, col, 0);
+    fbputchar('=', CHAT_ROWS, col);
   }
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
