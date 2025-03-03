@@ -160,7 +160,7 @@ void print_display_buffer() {
         // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
         fbputchar('=', CHAT_ROWS, col, 0);
         // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
-        previous_display_buffer[row][col] = display_buffer[row][col];
+        // previous_display_buffer[row][col] = display_buffer[row][col];
       }
     }
   }
