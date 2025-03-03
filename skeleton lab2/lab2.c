@@ -236,6 +236,8 @@ void handle_input(char c){
   return;
 
 }
+#include <unistd.h>
+
 int main()
 {
   int err, col;
@@ -264,6 +266,7 @@ int main()
   }
   handle_chat_message("Welcome to the chat room!");
   handle_chat_message("Type your message and press Enter to send.");
+  sleep(5);
   handle_input('a');
   // for(int i = 0; i < 3; i++) {
   //     handle_input('a');
