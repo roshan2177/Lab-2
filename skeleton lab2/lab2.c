@@ -165,7 +165,7 @@ void print_display_buffer() {
   // fbopen();
   int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1;
   int cursor_col = cursor_pos % CHAT_COLS;
-  // fbclear_input();
+  fbclear_input();
   for(int row = 0; row < INPUT_ROWS; row++) {
     // printf("row: %d\n", row);
     // printf("cursor_row: %d\n", cursor_row);
@@ -199,7 +199,7 @@ void handle_input(char c){
     cursor_pos = 0;
     handle_chat_message(input_buffer);
     memset(input_buffer, 0, sizeof(input_buffer));
-    fbclear_input();
+    // fbclear_input();
     // printf("input_buffer: %s\n", input_buffer);
     update_display_buffer();
     // printf("display_buffer: %s\n", display_buffer[0]);
@@ -242,6 +242,7 @@ void handle_input(char c){
             input_buffer[i] = input_buffer[i - 1];
           }
           input_buffer[cursor_pos] = c;
+          
           // printf("input_buffer: %s\n", input_buffer);
           cursor_pos++;
           update_display_buffer();
