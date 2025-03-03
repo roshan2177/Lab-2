@@ -121,7 +121,6 @@ void update_display_buffer(){
   for (int i = 0; i < CHAT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
-    display_buffer[i][CHAT_COLS - 1] = '\0';
   }
   int start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
   int len_to_display = INPUT_ROWS * CHAT_COLS > INPUT_BUFFER_SIZE - start_idx ? INPUT_BUFFER_SIZE - start_idx : INPUT_ROWS * CHAT_COLS;
@@ -137,7 +136,9 @@ void update_display_buffer(){
     }
     
   }
+  printf("display_buffer: %s\n", display_buffer);
 }
+
 // void print_display_buffer(){
 //   for(int row = 0; row < INPUT_ROWS; row++) {
 //     for(int col = 0; col < CHAT_COLS; col++) {
@@ -231,7 +232,7 @@ void handle_input(char c){
             input_buffer[i] = input_buffer[i - 1];
           }
           input_buffer[cursor_pos] = c;
-          printf("input_buffer: %s\n", input_buffer);
+          // printf("input_buffer: %s\n", input_buffer);
           cursor_pos++;
           update_display_buffer();
           print_display_buffer();
