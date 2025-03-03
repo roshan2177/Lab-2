@@ -125,11 +125,14 @@ void update_display_buffer(){
   }
   int start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
   int len_to_display = INPUT_ROWS * CHAT_COLS > INPUT_BUFFER_SIZE - start_idx ? INPUT_BUFFER_SIZE - start_idx : INPUT_ROWS * CHAT_COLS;
+  printf("len_to_display: %d\n", len_to_display);
+  printf("start_idx: %d\n", start_idx);
   if(len_to_display > 0){
     int line_idx = 0;
     for (int i = 0; i < len_to_display; i++)
     {
       display_buffer[line_idx][i % CHAT_COLS] = input_buffer[start_idx + i];
+      printf("display_buffer[%d][%d]: %c\n", line_idx, i % CHAT_COLS, display_buffer[line_idx][i % CHAT_COLS]);
       if ((i + 1) % CHAT_COLS == 0)
       {
         line_idx++;
