@@ -268,6 +268,7 @@ int main()
   handle_chat_message("Type your message and press Enter to send.");
   sleep(5);
   handle_input('a');
+  printf("input_buffer: %s\n", input_buffer);
   // for(int i = 0; i < 3; i++) {
   //     handle_input('a');
   //     handle_input('b');
