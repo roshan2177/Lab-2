@@ -60,7 +60,7 @@ int fbopen()
  * fbopen() must be called first.
  */
 #include <stdbool.h>
-void fbputchar(char c, int row, int col, bool is_cursor = false)
+void fbputchar(char c, int row, int col, bool is_cursor)
 {
   int x, y;
   unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
