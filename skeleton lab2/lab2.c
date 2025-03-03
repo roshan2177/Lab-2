@@ -157,7 +157,8 @@ void print_display_buffer() {
         bool is_cursor = 0;
         printf("row: %d, col: %d, is_cursor: %d\n", row, col, is_cursor);
         printf("Char: %d\n", display_buffer[row][col]);
-        fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
+        // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col, is_cursor);
+        fbputchar("a", row + CHAT_ROWS + 1, col, is_cursor);
         // fbputchar(display_buffer[row][col], row + CHAT_ROWS + 1, col);
         previous_display_buffer[row][col] = display_buffer[row][col];
       }
