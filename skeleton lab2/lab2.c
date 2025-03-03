@@ -173,6 +173,7 @@ void print_display_buffer() {
     // printf("cursor_col: %d\n", cursor_col);
     printf("display_buffer[row]: %s\n", display_buffer[row]);
     memcpy(tmp, display_buffer[row], CHAT_COLS);
+    printf("tmp: %s\n", tmp);
     fbputs_with_cursor(tmp, row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
