@@ -131,8 +131,9 @@ void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cur
   printf("row: %d, col: %d\n", row, col);
   printf("cursor_row: %d, cursor_col: %d\n", cursor_row, cursor_col);
   printf("Trying to output: %s\n", tmp_string);
-  while ((c = *tmp++) != 0) fbputchar(c, row, col++, row == cursor_row && col== cursor_col);
-  // while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
+  int cnt = 63;
+  while ((c = *tmp++) != 0 && cnt--) fbputchar(c, row, col++, row == cursor_row && col== cursor_col);
+  // while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col == cursor_col);
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
