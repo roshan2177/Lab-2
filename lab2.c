@@ -7,23 +7,23 @@
 #include <pthread.h>
 #include "usbkeyboard.h"
 
-#define SERVER_HOST "128.59.19.114"  // Change if needed
+#define SERVER_HOST "128.59.19.114"  // IP address given to connect 
 #define SERVER_PORT 42000
 #define BUFFER_SIZE 128
 #define MAX_INPUT_LENGTH 128
 
-int sockfd; /* Socket file descriptor */
+int sockfd; 
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 
-/* Input Buffer */
+
 char input_buffer[MAX_INPUT_LENGTH];
 int buffer_pos = 0;
 int use_terminal_input = 0;  // Fallback if USB keyboard isn't found
 
-/* Function to Convert USB Keycodes to ASCII */
+/* USB to ASCII functuon*/
 char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
     static char ascii_map[256] = {0};
     ascii_map[0x04] = 'a'; ascii_map[0x05] = 'b'; ascii_map[0x06] = 'c';
@@ -35,17 +35,17 @@ char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
     ascii_map[0x16] = 's'; ascii_map[0x17] = 't'; ascii_map[0x18] = 'u';
     ascii_map[0x19] = 'v'; ascii_map[0x1A] = 'w'; ascii_map[0x1B] = 'x';
     ascii_map[0x1C] = 'y'; ascii_map[0x1D] = 'z';
-    ascii_map[0x2C] = ' ';  // Spacebar
-    ascii_map[0x28] = '\n'; // Enter key
-    ascii_map[0x2A] = '\b'; // Backspace
+    ascii_map[0x2C] = ' ';  
+    ascii_map[0x28] = '\n'; 
+    ascii_map[0x2A] = '\b'; 
 
     if (modifiers & USB_LSHIFT || modifiers & USB_RSHIFT) {
-        return ascii_map[keycode] - 32;  // Convert lowercase to uppercase
+        return ascii_map[keycode] - 32;  // Difference of 32 to convert between lower and upper
     }
     return ascii_map[keycode];
 }
 
-/* Connect to the chat server */
+/* Used in order to connect to the chat server */
 void connect_to_server() {
     struct sockaddr_in serv_addr;
 
@@ -135,7 +135,7 @@ int main() {
                 break;
             }
 
-            /* Remove newline character */
+            
             input_buffer[strcspn(input_buffer, "\n")] = '\0';
 
             /* Listed is the exit condition */
@@ -144,7 +144,7 @@ int main() {
                 break;
             }
 
-            /* Used to Send Message */
+            /* This is used to  to Send Message */
             send_message_to_server(input_buffer);
         }
     } else {
