@@ -142,8 +142,10 @@ char tmp[CHAT_COLS + 1];
 void print_display_buffer() {
   pthread_mutex_lock(&display_mutex); // 加锁，确保线程安全
   // fbopen();
+  cursor_pos++;
   int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1 - start_idx / CHAT_COLS;
   int cursor_col = cursor_pos % CHAT_COLS;
+  cursor_pos--;
   fbclear_input();
   printf("========================\n");
   printf("cursor_row: %d\n", cursor_row);
@@ -158,10 +160,10 @@ void print_display_buffer() {
     // printf("tmp: %s\n", tmp);
     printf("display_buffer[row]: %s\n", display_buffer[row]);
     // printf("cursor_pos_char: %d\n", display_buffer[cursor_row][cursor_col]);
-    if (cursor_row > 21 && row == 0 ){
-      fbputs(tmp, row + CHAT_ROWS + 1, 0);
-      continue;
-    }
+    // if (cursor_row > 21 && row == 0 ){
+    //   fbputs(tmp, row + CHAT_ROWS + 1, 0);
+    //   continue;
+    // }
     fbputs_with_cursor(tmp, row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
