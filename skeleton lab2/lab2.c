@@ -55,7 +55,7 @@ void add_chat_message(const char *msg){
         int len = (msg_len - start < CHAT_COLS) ? (msg_len - start) : CHAT_COLS;
         int line  = (chat_start + chat_count) % CHAT_ROWS;
         strncpy(char_buffer[line], msg + start, len);
-        printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
+        // printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
         for(int i = len; i < CHAT_COLS; i++) {
             char_buffer[line][i] = '\0';
         }
@@ -73,7 +73,7 @@ void redraw_chat(){
     fbclear_chat();
     for(int i = 0; i < chat_count; i++) {
         int line = (chat_start + i) % CHAT_ROWS;
-        printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
+        // printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
         fbputs(char_buffer[line], i, 0);
     }
 }
@@ -235,7 +235,7 @@ void handle_input(char c){
     // send message
     printf("send message: %s\n", input_buffer);
     // TODO: send message to server
-    // send_message_to_server(input_buffer);
+    send_message_to_server(input_buffer);
     cursor_pos = 0;
     handle_chat_message(input_buffer);
     memset(input_buffer, 0, sizeof(input_buffer));
@@ -454,7 +454,7 @@ int main() {
     // connect_to_server();
 
     /* Used to start network thread */
-    // pthread_create(&network_thread, NULL, network_thread_f, NULL);
+    pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
     if (use_terminal_input) {
         /* Here is the Terminal-based Input Handling */
@@ -548,9 +548,9 @@ int main() {
     }
 
     /* Clean up */
-    // pthread_cancel(network_thread);
-    // pthread_join(network_thread, NULL);
-    // close(sockfd);
+    pthread_cancel(network_thread);
+    pthread_join(network_thread, NULL);
+    close(sockfd);
 
     return 0;
 }
