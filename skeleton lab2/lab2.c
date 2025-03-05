@@ -158,7 +158,7 @@ void print_display_buffer() {
     memcpy(tmp, display_buffer[row], CHAT_COLS);
     tmp[CHAT_COLS] = '\0';
     // printf("tmp: %s\n", tmp);
-    printf("HHHHHHH")
+    printf("HHHHHHH");
     printf("display_buffer[row]: %s\n", display_buffer[row]);
     // printf("cursor_pos_char: %d\n", display_buffer[cursor_row][cursor_col]);
     // if (cursor_row - 21 != row ){
