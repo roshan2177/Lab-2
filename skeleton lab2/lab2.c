@@ -175,49 +175,49 @@ void print_display_buffer() {
 }
 
 void handle_input(char c){
-    static int esc_sequence = 0;
-    if (esc_sequence == 0 && c == 27) {
-        esc_sequence = 1;
-        return;
-    }
-    if (esc_sequence == 1 && c == 91) {
-        esc_sequence = 2;
-        return;
-    }
-    if (esc_sequence == 2){
-        switch (c)
-        {
-        case 65:
-            // up arrow
-            printf("up arrow pressed\n");
-            break;
-        case 66:
-            // down arrow
-            printf("down arrow pressed\n");
-            break;
-        case 67:
-            // right arrow
-            if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
-              cursor_pos++;
-              printf("right arrow pressed\n");
-              update_display_buffer();
-              print_display_buffer();
+    // static int esc_sequence = 0;
+    // if (esc_sequence == 0 && c == 27) {
+    //     esc_sequence = 1;
+    //     return;
+    // }
+    // if (esc_sequence == 1 && c == 91) {
+    //     esc_sequence = 2;
+    //     return;
+    // }
+    // if (esc_sequence == 2){
+    //     switch (c)
+    //     {
+    //     case 65:
+    //         // up arrow
+    //         printf("up arrow pressed\n");
+    //         break;
+    //     case 66:
+    //         // down arrow
+    //         printf("down arrow pressed\n");
+    //         break;
+    //     case 67:
+    //         // right arrow
+    //         if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
+    //           cursor_pos++;
+    //           printf("right arrow pressed\n");
+    //           update_display_buffer();
+    //           print_display_buffer();
 
-            }
-            break;
-        case 68:
-            // left arrow
-            if (cursor_pos > 0) {
-                printf("left arrow pressed\n");
-              cursor_pos--;
-              update_display_buffer();
-              print_display_buffer();
-            }
-            break;
-        default:
-            break;
-        }
-    }
+    //         }
+    //         break;
+    //     case 68:
+    //         // left arrow
+    //         if (cursor_pos > 0) {
+    //             printf("left arrow pressed\n");
+    //           cursor_pos--;
+    //           update_display_buffer();
+    //           print_display_buffer();
+    //         }
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    // }
   if (c == '\n') {
     // send message
     printf("send message: %s\n", input_buffer);
@@ -247,21 +247,21 @@ void handle_input(char c){
         return;
         }
     }
-    //  else if (c == 27){
-    //   // left arrow
-    //   if (cursor_pos > 0) {
-    //     cursor_pos--;
-    //     update_display_buffer();
-    //     print_display_buffer();
-    //   } }
-    //   else if(c == 91){
-    //     // right arrow
-    //     if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
-    //       cursor_pos++;
-    //       update_display_buffer();
-    //       print_display_buffer();
-    //     }
-    //   } 
+     else if (c == 2){
+      // left arrow
+      if (cursor_pos > 0) {
+        cursor_pos--;
+        update_display_buffer();
+        print_display_buffer();
+      } }
+      else if(c == 3){
+        // right arrow
+        if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
+          cursor_pos++;
+          update_display_buffer();
+          print_display_buffer();
+        }
+      } 
       else {
         // char input
         if (cursor_pos < INPUT_BUFFER_SIZE - 1) {
@@ -317,8 +317,8 @@ char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
     ascii_map[0x2C] = ' ';  
     ascii_map[0x28] = '\n'; 
     ascii_map[0x2A] = '\b'; 
-    // ascii_map[0x50] = 27;
-    // ascii_map[0x4F] = 91;
+    ascii_map[0x50] = 2;
+    ascii_map[0x4F] = 3;
 
     if (modifiers & USB_LSHIFT || modifiers & USB_RSHIFT) {
         if (keycode >= 0x04 && keycode <= 0x1D) {
