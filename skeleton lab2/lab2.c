@@ -292,6 +292,8 @@ int use_terminal_input = 0;  // Fallback if USB keyboard isn't found
 
 /* USB to ASCII functuon*/
 char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
+    printf("keycode: %0x\n", keycode);
+    printf("modifiers: %0x\n", modifiers);
     static char ascii_map[256] = {0};
     ascii_map[0x04] = 'a'; ascii_map[0x05] = 'b'; ascii_map[0x06] = 'c';
     ascii_map[0x07] = 'd'; ascii_map[0x08] = 'e'; ascii_map[0x09] = 'f';
