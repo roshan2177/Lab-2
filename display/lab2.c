@@ -272,8 +272,8 @@ int main()
 
   struct sockaddr_in serv_addr;
 
-  // struct usb_keyboard_packet packet;
-  // int transferred;
+  struct usb_keyboard_packet packet;
+  int transferred;
   char keystate[12];
 
   if ((err = fbopen()) != 0) {
