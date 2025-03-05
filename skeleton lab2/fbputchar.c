@@ -128,9 +128,9 @@ void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cur
   char *tmp = tmp_string;
   memcpy(tmp_string, s, 256);
   strcat(tmp_string, " ");
-  printf("row: %d, col: %d\n", row, col);
-  printf("cursor_row: %d, cursor_col: %d\n", cursor_row, cursor_col);
-  printf("Trying to output: %s\n", tmp_string);
+  // printf("row: %d, col: %d\n", row, col);
+  // printf("cursor_row: %d, cursor_col: %d\n", cursor_row, cursor_col);
+  // printf("Trying to output: %s\n", tmp_string);
   int cnt = 64;
   // while ((c = *tmp++) != 0 && cnt--) fbputchar(c, row, col++, row == cursor_row && col== cursor_col);
   while ((c = *tmp++) != 0 && cnt--) fbputchar(c, row, col++, row == cursor_row && col== cursor_col);

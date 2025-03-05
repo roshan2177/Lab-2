@@ -55,6 +55,7 @@ void add_chat_message(const char *msg){
         int len = (msg_len - start < CHAT_COLS) ? (msg_len - start) : CHAT_COLS;
         int line  = (chat_start + chat_count) % CHAT_ROWS;
         strncpy(char_buffer[line], msg + start, len);
+        printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
         for(int i = len; i < CHAT_COLS; i++) {
             char_buffer[line][i] = '\0';
         }
@@ -147,9 +148,9 @@ void print_display_buffer() {
   int cursor_col = cursor_pos % CHAT_COLS + 1;
   // cursor_pos--;
   fbclear_input();
-  printf("========================\n");
-  printf("cursor_row: %d\n", cursor_row);
-  printf("cursor_col: %d\n", cursor_col);
+  // printf("========================\n");
+  // printf("cursor_row: %d\n", cursor_row);
+  // printf("cursor_col: %d\n", cursor_col);
   for(int row = 0; row < INPUT_ROWS; row++) {
     // printf("row: %d\n", row);
     // printf("cursor_row: %d\n", cursor_row);
@@ -158,7 +159,7 @@ void print_display_buffer() {
     memcpy(tmp, display_buffer[row], CHAT_COLS);
     tmp[CHAT_COLS] = '\0';
     // printf("tmp: %s\n", tmp);
-    printf("display_buffer[row]: %s\n", display_buffer[row]);
+    // printf("display_buffer[row]: %s\n", display_buffer[row]);
     // printf("cursor_pos_char: %d\n", display_buffer[cursor_row][cursor_col]);
     // if (cursor_row - 21 != row ){
     //   fbputs(tmp, row + CHAT_ROWS + 1, 0);
