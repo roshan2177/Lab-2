@@ -158,7 +158,7 @@ void print_display_buffer() {
     // printf("tmp: %s\n", tmp);
     printf("display_buffer[row]: %s\n", display_buffer[row]);
     // printf("cursor_pos_char: %d\n", display_buffer[cursor_row][cursor_col]);
-    if (cursor_row > 0 && row == 0 ){
+    if (cursor_row > 21 && row == 0 ){
       fbputs(tmp, row + CHAT_ROWS + 1, 0);
       continue;
     }
