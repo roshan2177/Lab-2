@@ -118,7 +118,9 @@ void fbputchar(char c, int row, int col, bool is_cursor)
 void fbputs(const char *s, int row, int col)
 {
   char c;
-  while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
+  int cnt = 64;
+  while ((c = *s++) != 0 && cnt--) fbputchar(c, row, col++, 0);
+  // while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
 }
 #include <string.h>
 void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cursor_col)
