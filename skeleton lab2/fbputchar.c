@@ -62,6 +62,11 @@ int fbopen()
 #include <stdbool.h>
 void fbputchar(char c, int row, int col, bool is_cursor)
 {
+  if (c == '\0')
+  {
+    c = ' ';
+  }
+  
   int x, y;
   unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
   unsigned char mask;
