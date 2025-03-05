@@ -120,14 +120,13 @@ void fbputs(const char *s, int row, int col)
   char c;
   while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
 }
-
+#include <string.h>
 void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cursor_col)
 {
   char c;
-  if (c == '\0')
-  {
-    c = ' ';
-  }
+  char tmp_string[257];
+  memcpy(tmp_string, s, 256);
+  strcat(tmp_string, " ");
   while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
 }
 
