@@ -127,7 +127,8 @@ void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cur
   char tmp_string[257];
   memcpy(tmp_string, s, 256);
   strcat(tmp_string, " ");
-  while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
+  while ((c = *tmp_string++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
+  // while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
