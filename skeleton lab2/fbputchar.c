@@ -128,6 +128,7 @@ void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cur
   char *tmp = tmp_string;
   memcpy(tmp_string, s, 256);
   strcat(tmp_string, " ");
+  printf("Trying to output: %s\n", tmp_string);
   while ((c = *tmp++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
   // while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
 }
