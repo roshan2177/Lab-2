@@ -451,7 +451,7 @@ int main() {
     }
 
     /* Used to connect to the chat server */
-    // connect_to_server();
+    connect_to_server();
 
     /* Used to start network thread */
     pthread_create(&network_thread, NULL, network_thread_f, NULL);
