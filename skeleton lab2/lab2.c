@@ -100,7 +100,7 @@ void update_display_buffer(){
   for (int i = 0; i < INPUT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
-    display_buffer[i][CHAT_COLS - 1] = '\0';
+    // display_buffer[i][CHAT_COLS - 1] = '\0';
   }
   // printf("input_buffer: %s\n", input_buffer);
   start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
