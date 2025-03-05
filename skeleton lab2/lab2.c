@@ -237,7 +237,7 @@ void handle_input(char c){
     // TODO: send message to server
     send_message_to_server(input_buffer);
     cursor_pos = 0;
-    handle_chat_message(input_buffer);
+    // handle_chat_message(input_buffer);
     memset(input_buffer, 0, sizeof(input_buffer));
     // fbclear_input();
     // printf("input_buffer: %s\n", input_buffer);
