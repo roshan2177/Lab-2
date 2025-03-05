@@ -1,3 +1,5 @@
+ # /*
+ *
 * CSEE 4840 Lab 2 - Modified to Support Simulated Input Without FPGA
  *
  */
@@ -11,7 +13,7 @@
 #include "usbkeyboard.h"
 #include <pthread.h>
 
-
+/* Chat Server Configuration */
 #define SERVER_HOST "128.59.19.114"  
 #define SERVER_PORT 42000
 #define BUFFER_SIZE 128
@@ -23,11 +25,11 @@ uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 
-/
+
 char input_buffer[MAX_INPUT_LENGTH];
 int buffer_pos = 0;
 
-/* Function that is used to Convert USB Keycodes to ASCII */
+
 char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
     static char ascii_map[256] = {0};
     ascii_map[0x04] = 'a'; ascii_map[0x05] = 'b'; ascii_map[0x06] = 'c';
@@ -55,18 +57,19 @@ int main() {
     struct usb_keyboard_packet packet;
     int transferred;
     
-   
+    
     if ((keyboard = openkeyboard(&endpoint_address)) == NULL) {
         printf("No USB keyboard found. Simulating input...\n");
-        keyboard = NULL; // No real keyboard, set to NULL
+        keyboard = NULL; 
     }
     
-    
+   
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         fprintf(stderr, "Error: Could not create socket\n");
         exit(1);
     }
 
+    
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(SERVER_PORT);
@@ -75,15 +78,16 @@ int main() {
         exit(1);
     }
 
+    
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         fprintf(stderr, "Error: Could not connect to chat server\n");
         exit(1);
     }
 
-   
+    
     pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
-    /* Simulate Keyboard Input If No USB Keyboard Is Found */
+    
     if (!keyboard) {
         char simulated_keys[] = "Hello from simulated keyboard!\n";
         for (int i = 0; simulated_keys[i] != '\0'; i++) {
@@ -93,13 +97,13 @@ int main() {
             usleep(100000); 
         }
 
-        /* Used to simulate pressing Enter */
+        
         printf("\nSimulated Enter Key Pressed.\n");
         write(sockfd, input_buffer, buffer_pos);
         printf("Message Sent: %s\n", input_buffer);
         buffer_pos = 0;
     } else {
-        /* Real Keyboard Input Handling */
+        
         printf("Chat client started. Type messages and press Enter to send.\n");
         while (1) {
             libusb_interrupt_transfer(keyboard, endpoint_address,
@@ -108,23 +112,23 @@ int main() {
             if (transferred == sizeof(packet)) {
                 char key = usb_to_ascii(packet.keycode[0], packet.modifiers);
                 if (key) {
-                    if (key == '\b' && buffer_pos > 0) {  // Backspace handling
+                    if (key == '\b' && buffer_pos > 0) {  
                         buffer_pos--;
                         input_buffer[buffer_pos] = '\0';
-                        printf("\b \b"); // Erase last character in terminal
-                    } else if (key == '\n') {  // Enter key sends a message
+                        printf("\b \b"); 
+                    } else if (key == '\n') {  
                         input_buffer[buffer_pos] = '\0';
                         write(sockfd, input_buffer, buffer_pos);
                         printf("\nMessage Sent: %s\n", input_buffer);
-                        buffer_pos = 0;  // Use to reset buffer
+                        buffer_pos = 0;  
                     } else if (buffer_pos < MAX_INPUT_LENGTH - 1) {  
                         input_buffer[buffer_pos++] = key;
                         input_buffer[buffer_pos] = '\0';
-                        printf("%c", key);  // Used to print typed character
+                        printf("%c", key);  
                     }
                 }
 
-                /* USed to exit on ESC key  */
+                
                 if (packet.keycode[0] == 0x29) {
                     break;
                 }
@@ -132,14 +136,14 @@ int main() {
         }
     }
 
-    /* Clean up */
+    
     pthread_cancel(network_thread);
     pthread_join(network_thread, NULL);
     close(sockfd);
     return 0;
 }
 
-/* Network thread to receive messages */
+
 void *network_thread_f(void *ignored) {
     char recvBuf[BUFFER_SIZE];
     int n;
@@ -151,4 +155,5 @@ void *network_thread_f(void *ignored) {
 
     return NULL;
 }
+
 
