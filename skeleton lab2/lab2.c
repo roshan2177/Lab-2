@@ -414,7 +414,23 @@ void *network_thread_f(void *ignored) {
 int main() {
     struct usb_keyboard_packet packet;
     int transferred;
+    int err, col;
 
+    struct sockaddr_in serv_addr;
+
+    struct usb_keyboard_packet packet;
+    int transferred;
+    char keystate[12];
+
+    if ((err = fbopen()) != 0) {
+      fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
+      exit(1);
+    }
+    fbclear();
+    for(int col = 0; col < 64; col++) {
+      fbputchar('=', CHAT_ROWS, col, 0);
+    }
+    handle_chat_message("Welcome to the chat room!");
     /* This is to  to Open the USB Keyboard */
     if ((keyboard = openkeyboard(&endpoint_address)) == NULL) {
         printf("No USB keyboard found. Falling back to terminal input.\n");
