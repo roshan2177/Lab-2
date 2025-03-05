@@ -124,6 +124,10 @@ void fbputs(const char *s, int row, int col)
 void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cursor_col)
 {
   char c;
+  if (c == '\0')
+  {
+    c = ' ';
+  }
   while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col - 1 == cursor_col);
 }
 
