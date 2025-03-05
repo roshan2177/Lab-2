@@ -73,6 +73,7 @@ void redraw_chat(){
     fbclear_chat();
     for(int i = 0; i < chat_count; i++) {
         int line = (chat_start + i) % CHAT_ROWS;
+        printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
         fbputs(char_buffer[line], i, 0);
     }
 }
