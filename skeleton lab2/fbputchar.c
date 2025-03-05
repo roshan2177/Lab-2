@@ -119,7 +119,7 @@ void fbputs(const char *s, int row, int col)
 void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cursor_col)
 {
   char c;
-  while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col == cursor_col);
+  while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col == cursor_col + 1);
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
