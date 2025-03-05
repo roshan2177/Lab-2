@@ -11,23 +11,23 @@
 #include "usbkeyboard.h"
 #include <pthread.h>
 
-/* Chat Server Configuration */
-#define SERVER_HOST "128.59.19.114"  // Change to the correct IP if needed
+
+#define SERVER_HOST "128.59.19.114"  
 #define SERVER_PORT 42000
 #define BUFFER_SIZE 128
 #define MAX_INPUT_LENGTH 128
 
-int sockfd; /* Socket file descriptor */
+int sockfd; 
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 
-/* Input Buffer for Typed Characters */
+/
 char input_buffer[MAX_INPUT_LENGTH];
 int buffer_pos = 0;
 
-/* Function to Convert USB Keycodes to ASCII */
+/* Function that is used to Convert USB Keycodes to ASCII */
 char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
     static char ascii_map[256] = {0};
     ascii_map[0x04] = 'a'; ascii_map[0x05] = 'b'; ascii_map[0x06] = 'c';
@@ -55,19 +55,18 @@ int main() {
     struct usb_keyboard_packet packet;
     int transferred;
     
-    /* Try to Open the Keyboard */
+   
     if ((keyboard = openkeyboard(&endpoint_address)) == NULL) {
         printf("No USB keyboard found. Simulating input...\n");
         keyboard = NULL; // No real keyboard, set to NULL
     }
     
-    /* Create a TCP socket */
+    
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         fprintf(stderr, "Error: Could not create socket\n");
         exit(1);
     }
 
-    /* Set up server address */
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(SERVER_PORT);
@@ -76,13 +75,12 @@ int main() {
         exit(1);
     }
 
-    /* Connect to the server */
     if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         fprintf(stderr, "Error: Could not connect to chat server\n");
         exit(1);
     }
 
-    /* Start the network thread */
+   
     pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
     /* Simulate Keyboard Input If No USB Keyboard Is Found */
@@ -92,10 +90,10 @@ int main() {
             printf("Simulated Key Pressed: %c\n", simulated_keys[i]);
             input_buffer[buffer_pos++] = simulated_keys[i];
             input_buffer[buffer_pos] = '\0';
-            usleep(100000); // Simulate typing delay
+            usleep(100000); 
         }
 
-        /* Simulate pressing Enter */
+        /* Used to simulate pressing Enter */
         printf("\nSimulated Enter Key Pressed.\n");
         write(sockfd, input_buffer, buffer_pos);
         printf("Message Sent: %s\n", input_buffer);
@@ -114,19 +112,19 @@ int main() {
                         buffer_pos--;
                         input_buffer[buffer_pos] = '\0';
                         printf("\b \b"); // Erase last character in terminal
-                    } else if (key == '\n') {  // Enter key sends message
+                    } else if (key == '\n') {  // Enter key sends a message
                         input_buffer[buffer_pos] = '\0';
                         write(sockfd, input_buffer, buffer_pos);
                         printf("\nMessage Sent: %s\n", input_buffer);
-                        buffer_pos = 0;  // Reset buffer
+                        buffer_pos = 0;  // Use to reset buffer
                     } else if (buffer_pos < MAX_INPUT_LENGTH - 1) {  
                         input_buffer[buffer_pos++] = key;
                         input_buffer[buffer_pos] = '\0';
-                        printf("%c", key);  // Print typed character
+                        printf("%c", key);  // Used to print typed character
                     }
                 }
 
-                /* Exit on ESC key (0x29) */
+                /* USed to exit on ESC key  */
                 if (packet.keycode[0] == 0x29) {
                     break;
                 }

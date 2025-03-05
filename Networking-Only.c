@@ -10,18 +10,18 @@
 #include <pthread.h>
 
 /* Chat Server Configuration */
-#define SERVER_HOST "128.59.19.114"  // Change to the correct IP if needed
+#define SERVER_HOST "128.59.19.114"  
 #define SERVER_PORT 42000
 #define BUFFER_SIZE 128
 #define MAX_INPUT_LENGTH 128
 
-int sockfd; /* Socket file descriptor */
+int sockfd; 
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
 pthread_t network_thread;
 void *network_thread_f(void *);
 
-/* Input Buffer for Typed Characters */
+
 char input_buffer[MAX_INPUT_LENGTH];
 int buffer_pos = 0;
 
@@ -53,19 +53,19 @@ int main() {
     struct usb_keyboard_packet packet;
     int transferred;
     
-    /* Try to Open the Keyboard */
+   
     if ((keyboard = openkeyboard(&endpoint_address)) == NULL) {
         printf("No USB keyboard found. Simulating input...\n");
         keyboard = NULL; // No real keyboard, set to NULL
     }
     
-    /* Create a TCP socket */
+    
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         fprintf(stderr, "Error: Could not create socket\n");
         exit(1);
     }
 
-    /* Set up server address */
+  
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(SERVER_PORT);
@@ -93,13 +93,12 @@ int main() {
             usleep(100000); // Simulate typing delay
         }
 
-        /* Simulate pressing Enter */
         printf("\nSimulated Enter Key Pressed.\n");
         write(sockfd, input_buffer, buffer_pos);
         printf("Message Sent: %s\n", input_buffer);
         buffer_pos = 0;
     } else {
-        /* Real Keyboard Input Handling */
+      
         printf("Chat client started. Type messages and press Enter to send.\n");
         while (1) {
             libusb_interrupt_transfer(keyboard, endpoint_address,
@@ -108,23 +107,23 @@ int main() {
             if (transferred == sizeof(packet)) {
                 char key = usb_to_ascii(packet.keycode[0], packet.modifiers);
                 if (key) {
-                    if (key == '\b' && buffer_pos > 0) {  // Backspace handling
+                    if (key == '\b' && buffer_pos > 0) {  
                         buffer_pos--;
                         input_buffer[buffer_pos] = '\0';
-                        printf("\b \b"); // Erase last character in terminal
-                    } else if (key == '\n') {  // Enter key sends message
+                        printf("\b \b"); 
+                    } else if (key == '\n') {  
                         input_buffer[buffer_pos] = '\0';
                         write(sockfd, input_buffer, buffer_pos);
                         printf("\nMessage Sent: %s\n", input_buffer);
-                        buffer_pos = 0;  // Reset buffer
+                        buffer_pos = 0; 
                     } else if (buffer_pos < MAX_INPUT_LENGTH - 1) {  
                         input_buffer[buffer_pos++] = key;
                         input_buffer[buffer_pos] = '\0';
-                        printf("%c", key);  // Print typed character
+                        printf("%c", key);  
                     }
                 }
 
-                /* Exit on ESC key (0x29) */
+                /
                 if (packet.keycode[0] == 0x29) {
                     break;
                 }
@@ -132,14 +131,14 @@ int main() {
         }
     }
 
-    /* Clean up */
+    /
     pthread_cancel(network_thread);
     pthread_join(network_thread, NULL);
     close(sockfd);
     return 0;
 }
 
-/* Network thread to receive messages */
+
 void *network_thread_f(void *ignored) {
     char recvBuf[BUFFER_SIZE];
     int n;
