@@ -495,8 +495,9 @@ break;
 }
 }
 
-/* Clean up */
+/* clean up for networking portion*/
 pthread_cancel(network_thread);
+
 pthread_join(network_thread, NULL);
 close(sockfd);
 
