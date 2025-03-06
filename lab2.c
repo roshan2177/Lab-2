@@ -13,12 +13,12 @@
 #include <pthread.h>
 #include "usbkeyboard.h"
 
-#define SERVER_HOST "128.59.19.114"  // IP address given to connect 
+#define SERVER_HOST "128.59.19.114" // IP address given to connect
 #define SERVER_PORT 42000
 #define BUFFER_SIZE 128
 #define MAX_INPUT_LENGTH 128
 
-int sockfd; 
+int sockfd;
 struct libusb_device_handle *keyboard;
 uint8_t endpoint_address;
 pthread_t network_thread;
@@ -50,11 +50,14 @@ void fbclear_input(){
           fbputchar(' ', row, col, 0);  
       }
   }
+
+
 }
 char char_buffer[CHAT_ROWS][CHAT_COLS];
 int chat_start = 0;
 int chat_count = 0;
 void add_chat_message(const char *msg){
+
     int msg_len = strlen(msg);
     int start = 0;
     while(start < msg_len) {
@@ -84,13 +87,13 @@ void redraw_chat(){
 
 pthread_mutex_t chat_mutex = PTHREAD_MUTEX_INITIALIZER;
 void handle_chat_message(const char *msg){
-    pthread_mutex_lock(&chat_mutex);
-    add_chat_message(msg);
-    redraw_chat();
-    pthread_mutex_unlock(&chat_mutex);
+pthread_mutex_lock(&chat_mutex);
+add_chat_message(msg);
+redraw_chat();
+pthread_mutex_unlock(&chat_mutex);
 }
 
-#define INPUT_BUFFER_SIZE  256
+#define INPUT_BUFFER_SIZE 256
 // #define CHAT_COLS 64
 #define INPUT_ROWS 2
 char input_buffer[INPUT_BUFFER_SIZE];
@@ -100,6 +103,7 @@ int cursor_pos = 0;
 int display_start = 0;
 int start_idx = 0;
 void update_display_buffer(){
+
   for (int i = 0; i < INPUT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
@@ -119,12 +123,14 @@ void update_display_buffer(){
     
   }
 }
+
 #include <pthread.h>
 
 pthread_mutex_t display_mutex = PTHREAD_MUTEX_INITIALIZER;
 #include<stdbool.h>
 char tmp[CHAT_COLS + 1];
 void print_display_buffer() {
+
   pthread_mutex_lock(&display_mutex); 
   int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1 - start_idx / CHAT_COLS;
   int cursor_col = cursor_pos % CHAT_COLS + 1;
@@ -210,8 +216,9 @@ void handle_input(char c){
 
 int use_terminal_input = 0;  // Fallback if USB keyboard isn't found
 
-/* USB to ASCII functuon*/
+
 char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
+
 
     static char ascii_map[256] = {0};
     ascii_map[0x04] = 'a'; ascii_map[0x05] = 'b'; ascii_map[0x06] = 'c';
@@ -272,36 +279,37 @@ char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
 }
 
 /* Used in order to connect to the chat server */
+
 void connect_to_server() {
-    struct sockaddr_in serv_addr;
+struct sockaddr_in serv_addr;
 
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0) {
-        perror("Error: Could not create socket");
-        exit(1);
-    }
-
-    printf("Socket created successfully.\n");
-
-    memset(&serv_addr, 0, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(SERVER_PORT);
-
-    if (inet_pton(AF_INET, SERVER_HOST, &serv_addr.sin_addr) <= 0) {
-        fprintf(stderr, "Error: Invalid IP address format or unreachable host \"%s\"\n", SERVER_HOST);
-        exit(1);
-    }
-
-    if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        perror("Error: connect() failed. Is the server running?");
-        exit(1);
-    }
-
-    printf("Successfully connected to chat server at %s:%d\n", SERVER_HOST, SERVER_PORT);
+sockfd = socket(AF_INET, SOCK_STREAM, 0);
+if (sockfd < 0) {
+perror("Error: Problem in creating socket");
+exit(1);
 }
 
-/* This is to send the messages  to the Server */
+printf("Socket created successfully.\n");
+
+memset(&serv_addr, 0, sizeof(serv_addr));
+serv_addr.sin_family = AF_INET;
+serv_addr.sin_port = htons(SERVER_PORT);
+
+if (inet_pton(AF_INET, SERVER_HOST, &serv_addr.sin_addr) <= 0) {
+fprintf(stderr, "Error: Possibly may be unreachable host or Invalid IP address format \"%s\"\n", SERVER_HOST);
+exit(1);
+}
+
+if (connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+perror("Error: connect() failed. Please check whether the server running?");
+exit(1);
+}
+
+printf("Connected to chat server Successfully at %s:%d\n", SERVER_HOST, SERVER_PORT);
+}
+
 void send_message_to_server(char *message) {
+
     int len = strlen(message);
     if (write(sockfd, message, len) != len) {
         perror("Error: Failed to send message to server");
@@ -440,4 +448,88 @@ int main() {
     close(sockfd);
 
     return 0;
+}
+
+if ((keyboard = openkeyboard(&endpoint_address)) == NULL) {
+printf("Cannot find USB keyboard. Openning terminal input.\n");
+use_terminal_input = 1; 
+}
+
+connect_to_server();
+pthread_create(&network_thread, NULL, network_thread_f, NULL);
+if (use_terminal_input) {
+printf("Startin Chat client. Type in messages and press Enter to send.\n");
+printf("To Quit Type '/exit'.\n");
+
+while (1) {
+printf("> ");
+fflush(stdout);
+
+if (fgets(input_buffer, MAX_INPUT_LENGTH, stdin) == NULL) {
+printf("Error: Cannot read input.\n");
+break;
+}
+
+input_buffer[strcspn(input_buffer, "\n")] = '\0';
+
+if (strcmp(input_buffer, "/exit") == 0) {
+printf("Exiting chat client.\n");
+break;
+}
+
+// send_message_to_server(input_buffer);
+}
+} else {
+
+printf("Started Chat client. To type messages use the USB keyboard.\n");
+uint8_t prev_keys[MAX_KEYS] = {0};
+while (1) {
+
+int r = libusb_interrupt_transfer(keyboard, endpoint_address,
+(unsigned char *) &packet, sizeof(packet),
+&transferred, 0);
+if (r != 0) {
+fprintf(stderr, "Error: libusb_interrupt_transfer failed: %s\n", libusb_error_name(r));
+continue;
+}
+if (transferred < sizeof(packet)) {
+fprintf(stderr, "Warning: Incomplete packet received: %d bytes\n", transferred);
+continue;
+}
+if (transferred == sizeof(packet)) {
+// handle_input(usb_to_ascii(packet.keycode[0], packet.modifiers));
+for (int i = 0; i < MAX_KEYS; i++) {
+uint8_t key = packet.keycode[i];
+if (key != 0){
+int already_pressed = 0;
+for (int j = 0; j < MAX_KEYS; j++) {
+if (prev_keys[j] == key) {
+already_pressed = 1;
+break;
+}
+}
+if (!already_pressed) {
+handle_input(usb_to_ascii(key, packet.modifiers));
+}
+}
+
+}
+memcpy(prev_keys, packet.keycode, MAX_KEYS);
+
+
+/* Use to escape*/
+if (packet.keycode[0] == 0x29) {
+break;
+}
+}
+}
+}
+
+/* clean up for networking portion*/
+pthread_cancel(network_thread);
+
+pthread_join(network_thread, NULL);
+close(sockfd);
+
+return 0;
 }
