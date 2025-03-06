@@ -55,6 +55,7 @@ void add_chat_message(const char *msg){
         int len = (msg_len - start < CHAT_COLS) ? (msg_len - start) : CHAT_COLS;
         int line  = (chat_start + chat_count) % CHAT_ROWS;
         strncpy(char_buffer[line], msg + start, len);
+        // printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
         for(int i = len; i < CHAT_COLS; i++) {
             char_buffer[line][i] = '\0';
         }
@@ -72,6 +73,7 @@ void redraw_chat(){
     fbclear_chat();
     for(int i = 0; i < chat_count; i++) {
         int line = (chat_start + i) % CHAT_ROWS;
+        // printf("char_buffer[%d]: %s\n", line, char_buffer[line]);
         fbputs(char_buffer[line], i, 0);
     }
 }
@@ -100,7 +102,7 @@ void update_display_buffer(){
   for (int i = 0; i < INPUT_ROWS; i++)
   {
     memset(display_buffer[i], ' ', CHAT_COLS);
-    display_buffer[i][CHAT_COLS - 1] = '\0';
+    // display_buffer[i][CHAT_COLS - 1] = '\0';
   }
   // printf("input_buffer: %s\n", input_buffer);
   start_idx = (cursor_pos < CHAT_COLS * INPUT_ROWS) ? 0 : ((cursor_pos ) / CHAT_COLS - 1 ) * CHAT_COLS;
@@ -142,9 +144,14 @@ char tmp[CHAT_COLS + 1];
 void print_display_buffer() {
   pthread_mutex_lock(&display_mutex); // 加锁，确保线程安全
   // fbopen();
+  // cursor_pos++;
   int cursor_row = cursor_pos / CHAT_COLS + CHAT_ROWS + 1 - start_idx / CHAT_COLS;
-  int cursor_col = cursor_pos % CHAT_COLS;
+  int cursor_col = cursor_pos % CHAT_COLS + 1;
+  // cursor_pos--;
   fbclear_input();
+  // printf("========================\n");
+  // printf("cursor_row: %d\n", cursor_row);
+  // printf("cursor_col: %d\n", cursor_col);
   for(int row = 0; row < INPUT_ROWS; row++) {
     // printf("row: %d\n", row);
     // printf("cursor_row: %d\n", cursor_row);
@@ -153,6 +160,12 @@ void print_display_buffer() {
     memcpy(tmp, display_buffer[row], CHAT_COLS);
     tmp[CHAT_COLS] = '\0';
     // printf("tmp: %s\n", tmp);
+    // printf("display_buffer[row]: %s\n", display_buffer[row]);
+    // printf("cursor_pos_char: %d\n", display_buffer[cursor_row][cursor_col]);
+    // if (cursor_row - 21 != row ){
+    //   fbputs(tmp, row + CHAT_ROWS + 1, 0);
+    //   continue;
+    // }
     fbputs_with_cursor(tmp, row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, cursor_row, cursor_col);
     // fbputs_with_cursor(display_buffer[row], row + CHAT_ROWS + 1, 0, -1, -1);
@@ -175,56 +188,56 @@ void print_display_buffer() {
 }
 
 void handle_input(char c){
-    static int esc_sequence = 0;
-    if (esc_sequence == 0 && c == 27) {
-        esc_sequence = 1;
-        return;
-    }
-    if (esc_sequence == 1 && c == 91) {
-        esc_sequence = 2;
-        return;
-    }
-    if (esc_sequence == 2){
-        switch (c)
-        {
-        case 65:
-            // up arrow
-            printf("up arrow pressed\n");
-            break;
-        case 66:
-            // down arrow
-            printf("down arrow pressed\n");
-            break;
-        case 67:
-            // right arrow
-            if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
-              cursor_pos++;
-              printf("right arrow pressed\n");
-              update_display_buffer();
-              print_display_buffer();
+    // static int esc_sequence = 0;
+    // if (esc_sequence == 0 && c == 27) {
+    //     esc_sequence = 1;
+    //     return;
+    // }
+    // if (esc_sequence == 1 && c == 91) {
+    //     esc_sequence = 2;
+    //     return;
+    // }
+    // if (esc_sequence == 2){
+    //     switch (c)
+    //     {
+    //     case 65:
+    //         // up arrow
+    //         printf("up arrow pressed\n");
+    //         break;
+    //     case 66:
+    //         // down arrow
+    //         printf("down arrow pressed\n");
+    //         break;
+    //     case 67:
+    //         // right arrow
+    //         if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
+    //           cursor_pos++;
+    //           printf("right arrow pressed\n");
+    //           update_display_buffer();
+    //           print_display_buffer();
 
-            }
-            break;
-        case 68:
-            // left arrow
-            if (cursor_pos > 0) {
-                printf("left arrow pressed\n");
-              cursor_pos--;
-              update_display_buffer();
-              print_display_buffer();
-            }
-            break;
-        default:
-            break;
-        }
-    }
+    //         }
+    //         break;
+    //     case 68:
+    //         // left arrow
+    //         if (cursor_pos > 0) {
+    //             printf("left arrow pressed\n");
+    //           cursor_pos--;
+    //           update_display_buffer();
+    //           print_display_buffer();
+    //         }
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    // }
   if (c == '\n') {
     // send message
     printf("send message: %s\n", input_buffer);
     // TODO: send message to server
-    // send_message_to_server(input_buffer);
+    send_message_to_server(input_buffer);
     cursor_pos = 0;
-    handle_chat_message(input_buffer);
+    // handle_chat_message(input_buffer);
     memset(input_buffer, 0, sizeof(input_buffer));
     // fbclear_input();
     // printf("input_buffer: %s\n", input_buffer);
@@ -247,21 +260,21 @@ void handle_input(char c){
         return;
         }
     }
-    //  else if (c == 27){
-    //   // left arrow
-    //   if (cursor_pos > 0) {
-    //     cursor_pos--;
-    //     update_display_buffer();
-    //     print_display_buffer();
-    //   } }
-    //   else if(c == 91){
-    //     // right arrow
-    //     if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
-    //       cursor_pos++;
-    //       update_display_buffer();
-    //       print_display_buffer();
-    //     }
-    //   } 
+     else if (c == 2){
+      // left arrow
+      if (cursor_pos > 0) {
+        cursor_pos--;
+        update_display_buffer();
+        print_display_buffer();
+      } }
+      else if(c == 3){
+        // right arrow
+        if (cursor_pos < INPUT_BUFFER_SIZE - 1 && input_buffer[cursor_pos] != '\0') {
+          cursor_pos++;
+          update_display_buffer();
+          print_display_buffer();
+        }
+      } 
       else {
         // char input
         if (cursor_pos < INPUT_BUFFER_SIZE - 1) {
@@ -292,6 +305,8 @@ int use_terminal_input = 0;  // Fallback if USB keyboard isn't found
 
 /* USB to ASCII functuon*/
 char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
+    // printf("keycode: %0x\n", keycode);
+    // printf("modifiers: %0x\n", modifiers);
     static char ascii_map[256] = {0};
     ascii_map[0x04] = 'a'; ascii_map[0x05] = 'b'; ascii_map[0x06] = 'c';
     ascii_map[0x07] = 'd'; ascii_map[0x08] = 'e'; ascii_map[0x09] = 'f';
@@ -315,8 +330,8 @@ char usb_to_ascii(uint8_t keycode, uint8_t modifiers) {
     ascii_map[0x2C] = ' ';  
     ascii_map[0x28] = '\n'; 
     ascii_map[0x2A] = '\b'; 
-    // ascii_map[0x50] = 27;
-    // ascii_map[0x4F] = 91;
+    ascii_map[0x50] = 2;
+    ascii_map[0x4F] = 3;
 
     if (modifiers & USB_LSHIFT || modifiers & USB_RSHIFT) {
         if (keycode >= 0x04 && keycode <= 0x1D) {
@@ -414,7 +429,21 @@ void *network_thread_f(void *ignored) {
 int main() {
     struct usb_keyboard_packet packet;
     int transferred;
+    int err, col;
 
+    struct sockaddr_in serv_addr;
+
+    char keystate[12];
+
+    if ((err = fbopen()) != 0) {
+      fprintf(stderr, "Error: Could not open framebuffer: %d\n", err);
+      exit(1);
+    }
+    fbclear();
+    for(int col = 0; col < 64; col++) {
+      fbputchar('=', CHAT_ROWS, col, 0);
+    }
+    handle_chat_message("Welcome to the chat room!");
     /* This is to  to Open the USB Keyboard */
     if ((keyboard = openkeyboard(&endpoint_address)) == NULL) {
         printf("No USB keyboard found. Falling back to terminal input.\n");
@@ -422,10 +451,10 @@ int main() {
     }
 
     /* Used to connect to the chat server */
-    // connect_to_server();
+    connect_to_server();
 
     /* Used to start network thread */
-    // pthread_create(&network_thread, NULL, network_thread_f, NULL);
+    pthread_create(&network_thread, NULL, network_thread_f, NULL);
 
     if (use_terminal_input) {
         /* Here is the Terminal-based Input Handling */
@@ -519,9 +548,9 @@ int main() {
     }
 
     /* Clean up */
-    // pthread_cancel(network_thread);
-    // pthread_join(network_thread, NULL);
-    // close(sockfd);
+    pthread_cancel(network_thread);
+    pthread_join(network_thread, NULL);
+    close(sockfd);
 
     return 0;
 }

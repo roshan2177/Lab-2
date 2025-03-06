@@ -62,6 +62,11 @@ int fbopen()
 #include <stdbool.h>
 void fbputchar(char c, int row, int col, bool is_cursor)
 {
+  if (c == '\0')
+  {
+    c = ' ';
+  }
+  
   int x, y;
   unsigned char pixels, *pixelp = font + FONT_HEIGHT * c;
   unsigned char mask;
@@ -113,13 +118,25 @@ void fbputchar(char c, int row, int col, bool is_cursor)
 void fbputs(const char *s, int row, int col)
 {
   char c;
-  while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
+  int cnt = 64;
+  while ((c = *s++) != 0 && cnt--) fbputchar(c, row, col++, 0);
+  // while ((c = *s++) != 0) fbputchar(c, row, col++, 0);
 }
-
+#include <string.h>
 void fbputs_with_cursor(const char *s, int row, int col, int cursor_row, int cursor_col)
 {
   char c;
-  while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col == cursor_col);
+  char tmp_string[257];
+  char *tmp = tmp_string;
+  memcpy(tmp_string, s, 256);
+  strcat(tmp_string, " ");
+  // printf("row: %d, col: %d\n", row, col);
+  // printf("cursor_row: %d, cursor_col: %d\n", cursor_row, cursor_col);
+  // printf("Trying to output: %s\n", tmp_string);
+  int cnt = 64;
+  // while ((c = *tmp++) != 0 && cnt--) fbputchar(c, row, col++, row == cursor_row && col== cursor_col);
+  while ((c = *tmp++) != 0 && cnt--) fbputchar(c, row, col++, row == cursor_row && col== cursor_col);
+  // while ((c = *s++) != 0) fbputchar(c, row, col++, row == cursor_row && col == cursor_col);
 }
 
 /* 8 X 16 console font from /lib/kbd/consolefonts/lat0-16.psfu.gz
